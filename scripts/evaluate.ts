@@ -1,0 +1,13 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {createSession,applyCommand,receipt,type Observation} from '../src/domain/index.js';
+const raw=readFileSync('evaluation/scenarios.json','utf8'),fixture=JSON.parse(raw);
+const rows=fixture.cases.map((c:any)=>{let state=createSession();const add=(observation:Observation)=>{state=applyCommand(state,{type:'observe',observation},state.revision);};
+ if(c.signal!=='none')add(c.signal==='denied'?{probe:'signal',permission:'denied',rmsDb:null,peak:null,clippedFraction:null,sampleCount:0,durationMs:0,deviceLabel:''}:{probe:'signal',permission:'granted',rmsDb:c.signal==='quiet'?-60:-20,peak:c.signal==='clipped'?1:.3,clippedFraction:c.signal==='clipped'?.1:0,sampleCount:4096,durationMs:3200,deviceLabel:'SYNTHETIC fixture'});
+ if(c.replay!=='none')add({probe:'replay',signalId:state.evidence[0].id,heard:c.replay});
+ if(c.output!=='none')add({probe:'output',heard:c.output,playbackRequested:true});
+ if(c.network!=='none')add({probe:'network',samplesMs:c.network==='slow'?[20,22,23,24,700]:c.network==='loss'?[20,21,22,23]:[20,21,22,23,24],failures:c.network==='loss'?1:0});
+ if(c.adjust)state=applyCommand(state,{type:'adjust',probe:c.adjust,note:'Synthetic device change'},state.revision);
+ const r=receipt(state);return{name:c.name,expected:{next:c.next,ready:c.ready},actual:{next:r.nextProbe,ready:r.status==='READY_WITH_LIMITS'},passed:r.nextProbe===c.next&&(r.status==='READY_WITH_LIMITS')===c.ready};
+});
+const result={at:new Date().toISOString(),scope:fixture.scope,fixtureSha256:createHash('sha256').update(raw).digest('hex'),passed:rows.filter((r:any)=>r.passed).length,total:rows.length,rows};writeFileSync('evaluation/results.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({...result,rows:undefined},null,2));if(result.passed!==result.total)process.exitCode=1;

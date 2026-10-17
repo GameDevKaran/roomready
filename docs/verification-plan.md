@@ -1,17 +1,20 @@
-# RoomReady: verification plan
+# Verification record
 
-No tests or evaluations have run. The following are prospective acceptance targets, not results.
+Verified locally on 17 October 2026 with Node 24.8.0 and pinned dependencies. No public deployment or live model call is claimed.
 
-## Fixtures and acceptance
+| Check | Result |
+|---|---|
+| TypeScript and Vite build | Passed |
+| Node tests | 29/29: 16 domain, 5 model contract, 8 server/persistence/MCP |
+| Desktop/mobile Chromium | 20/20 scenarios; 50.7-second final full run |
+| Synthetic receipt evaluation | 16/16 expected readiness/next-probe outcomes |
+| Real local MCP | Initialize, discovery, observation, adjustment, withdrawal and receipt verified |
+| SQLite reopen | Persistence, idempotency and deletion passed |
+| Linux Docker | Build, health, actual MCP write and restart persistence passed |
+| Dependency audit | No vulnerabilities reported during clean install |
 
-12 development scenarios plus 16 held-out cases covering silence, clipping, permission denial, normal input, unconfirmed playback and delayed endpoint response. Compare a fixed troubleshooting wizard with adaptive probe selection. Target correct next-test selection in at least 14/16 cases and zero unsupported ready claims. Report number of probes, user corrections, p50/p95 latency and actual inference cost. Synthetic audio tests measure signal logic; they are not proof of real-world headset compatibility.
+Browser tests cover consent, synthetic signal/replay, user-confirmed tone, own-endpoint calls, denied/cancelled capture, changed settings, withdrawal/deletion, HTML escaping and model-unavailable/failure guidance. All synthetic audio/provider inputs are test doubles. Real browser getUserMedia returned NotSupportedError in this host, including with Chromium fake-device flags. No workaround is presented as successful microphone hardware verification. A real Web Audio sine stream exercises downstream recording and analysis. Native audibility requires a person to listen; automated button clicks do not establish it.
 
-## Demonstration to verify
+The additional 16-case evaluation was frozen before its first run and was not used to tune the domain. It is not the planned independent live-model symptom evaluation. That evaluation, model latency/cost, hardware capture, human listening/usability, real mobile devices, formal accessibility and public HTTPS checks remain outstanding.
 
-0–20 imminent tutoring session; 20–50 run a microphone check; 50–85 diagnose measured clipping and explain a user adjustment; 85–115 retest; 115–135 show denied-permission/text fallback; 135–150 display a receipt that separates measured, confirmed and unknown facts.
-
-## Result record
-
-For each run, record the source commit, fixture version, runtime/provider versions, actual pass and failure counts, latency, cost where relevant, and limitations. Keep development and held-out inputs separate. Report negative findings; freeze the protocol before inspecting held-out results.
-
-A release requires a functioning end-to-end workflow and a clean-session replay. Documentation, repository creation and HTTP availability alone do not establish application correctness.
+Commands are in README; the manual GitHub Actions workflow is prepared, not executed. docs/evaluation.md records the fixture hash, thresholds and limitations. The 49.36-second local captioned synthetic-audio video is a rehearsal; public upload and a consenting hardware walkthrough remain separate release gates.

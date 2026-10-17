@@ -1,0 +1,201 @@
+{
+  "at": "2026-10-17T04:05:50.900Z",
+  "scope": "Synthetic post-implementation receipt scenarios, frozen before first run; not model-selection or real-hardware accuracy.",
+  "fixtureSha256": "57a422c4d509cd528d04f48e6068a04331bfca5c7e752ec928782f0630c4673d",
+  "passed": 16,
+  "total": 16,
+  "rows": [
+    {
+      "name": "Untested",
+      "expected": {
+        "next": "signal",
+        "ready": false
+      },
+      "actual": {
+        "next": "signal",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Denied input, other checks work",
+      "expected": {
+        "next": "signal",
+        "ready": false
+      },
+      "actual": {
+        "next": "signal",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Quiet despite intelligible replay",
+      "expected": {
+        "next": "signal",
+        "ready": false
+      },
+      "actual": {
+        "next": "signal",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Clipped despite audible output",
+      "expected": {
+        "next": "signal",
+        "ready": false
+      },
+      "actual": {
+        "next": "signal",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Healthy level, replay missing",
+      "expected": {
+        "next": "replay",
+        "ready": false
+      },
+      "actual": {
+        "next": "replay",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Unclear replay",
+      "expected": {
+        "next": "replay",
+        "ready": false
+      },
+      "actual": {
+        "next": "replay",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Unconfirmed replay",
+      "expected": {
+        "next": "replay",
+        "ready": false
+      },
+      "actual": {
+        "next": "replay",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Output not yet tested",
+      "expected": {
+        "next": "output",
+        "ready": false
+      },
+      "actual": {
+        "next": "output",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Playback without confirmation",
+      "expected": {
+        "next": "output",
+        "ready": false
+      },
+      "actual": {
+        "next": "output",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Inaudible output",
+      "expected": {
+        "next": "output",
+        "ready": false
+      },
+      "actual": {
+        "next": "output",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Network absent",
+      "expected": {
+        "next": "network",
+        "ready": false
+      },
+      "actual": {
+        "next": "network",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Network slow tail",
+      "expected": {
+        "next": "network",
+        "ready": false
+      },
+      "actual": {
+        "next": "network",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Partial endpoint failure",
+      "expected": {
+        "next": "network",
+        "ready": false
+      },
+      "actual": {
+        "next": "network",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "All supported evidence passes",
+      "expected": {
+        "next": null,
+        "ready": true
+      },
+      "actual": {
+        "next": null,
+        "ready": true
+      },
+      "passed": true
+    },
+    {
+      "name": "Input adjustment requires retest",
+      "expected": {
+        "next": "signal",
+        "ready": false
+      },
+      "actual": {
+        "next": "signal",
+        "ready": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Output adjustment requires retest",
+      "expected": {
+        "next": "output",
+        "ready": false
+      },
+      "actual": {
+        "next": "output",
+        "ready": false
+      },
+      "passed": true
+    }
+  ]
+}

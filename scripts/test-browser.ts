@@ -1,0 +1,6 @@
+import {spawn} from 'node:child_process';
+import {createApp} from '../src/server/app.js';
+import {Store} from '../src/server/store.js';
+const store=new Store(':memory:');const server=createApp({store}).listen(3221,'127.0.0.1');await new Promise<void>((r,j)=>{server.once('listening',r);server.once('error',j);});
+const modelStore=new Store(':memory:');const modelServer=createApp({store:modelStore,modelLabel:'TEST DOUBLE — no live inference',adviser:async({symptom,state})=>{if(symptom==='Fail the provider')throw new Error('Test failure');return{advice:{probe:'output',explanation:'Test suggestion: try the speaker tone.',evidenceIds:state.evidence.filter(e=>!e.withdrawn).slice(-1).map(e=>e.id)},trace:{provider:'TEST DOUBLE',model:'not live',latencyMs:0}};}}).listen(3223,'127.0.0.1');await new Promise<void>((r,j)=>{modelServer.once('listening',r);modelServer.once('error',j);});
+const child=spawn(process.execPath,['node_modules/playwright/cli.js','test',...process.argv.slice(2)],{stdio:'inherit',shell:false});const code=await new Promise<number>(r=>{child.once('exit',c=>r(c??1));child.once('error',()=>r(1));});server.closeAllConnections();await new Promise<void>(r=>server.close(()=>r()));store.close();modelServer.closeAllConnections();await new Promise<void>(r=>modelServer.close(()=>r()));modelStore.close();process.exitCode=code;

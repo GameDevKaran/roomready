@@ -1,17 +1,13 @@
-# RoomReady: architecture
+# Architecture
 
-Proposed design; no components have been implemented.
+A TypeScript browser app owns permission-sensitive capture and playback. Express serves the production build, an own-endpoint ping, browser-bound receipt export and a real stateless Streamable HTTP MCP server. SQLite stores structured observations and adjustment history for 24 hours. No audio endpoint exists: raw recordings stay in browser memory.
 
-State is `PERMISSION_PENDING → TEST_SELECTED → OBSERVED → EXPLAINED → USER_ACTION → RETESTED → READY_WITH_LIMITS | UNRESOLVED`. Browser tools check microphone permission and signal level, clipping, a controlled recording/replay, an output tone confirmed by the user, and latency to RoomReady's own endpoint. The app cannot infer that a speaker is audible merely because playback was requested.
+The browser explicitly asks for consent, obtains microphone permission, samples Web Audio waveform windows over 3.2 seconds and records a local MediaRecorder blob. RMS level, near-clipping fraction and sample counts are client-reported measurements. They are not calibrated hardware diagnostics. A replay answer references the current microphone observation; a new sample invalidates the old replay. Tone playback and audible output are separate facts. Five requests measure only RoomReady, including failures and p50/p95.
 
-A labelled **Alexa+ simulation** asks questions, interprets the observations and selects the next allowlisted probe. An authorized Amazon Bedrock text model handles ambiguous symptom descriptions and synthesizes a short evidence-linked action. Deterministic code owns measurements and readiness conditions. If microphone input is broken, visible controls and text let the user complete the diagnostic flow; the app must not enter an endless “please speak” loop.
+Deterministic receipt logic yields UNRESOLVED or READY_WITH_LIMITS. All four current checks must pass. An adjustment invalidates that probe; withdrawing the latest observation never resurrects an earlier positive result. History remains visible. Revision guards and request idempotency protect retries and concurrent tabs.
 
-Use TypeScript, Web Audio/media APIs, a small HTTPS diagnostic service, structured tool schemas and ephemeral session records. No native Alexa hardware or Zoom API access is assumed. The minimal product tests one browser/device pair with four probes, one correction/retest loop and a downloadable readiness receipt. Exclude network scanning, OS automation, recording other applications, biometric voice analysis and broad IT support. Own the test tone and collect only consenting test audio; default retention is session-only.
+MCP tools are get_receipt, record_probe, record_adjustment and withdraw_observation. The actual SDK client initializes, discovers tools and executes them over HTTP. The optional Bedrock adviser receives a symptom/current receipt and returns an allowlisted next-probe recommendation with validated evidence citations. It never runs probes or edits results. No successful live inference is claimed.
 
-## Failure handling and data boundaries
+Cookie capabilities are random, HttpOnly and SameSite=Strict, with Secure in production. Exact origin/host checks, CSP, payload bounds, schema validation and request limits protect API boundaries. SQLite transactions isolate state changes. Model request counters are process-local, so external billing controls are required before paid public exposure. Browser reports remain untrusted measurements even though schemas are validated.
 
-Preserve original inputs and make unavailable evidence explicit. Provider failures must return a visible unresolved state. Decisions that change user or provider state need the confirmation specified above. Record source versions and operation identifiers without exposing credentials.
-
-## Implementation record
-
-Add pinned dependencies, actual component boundaries and operational instructions when the first working slice exists. Document departures from this design with their reason; do not describe planned integrations as verified.
+The independent data model and UI are new. Narrow infrastructure adapted from HoldThat is documented in provenance; no task-checklist product logic is shared. See deployment.md for configuration, retention, hosting and release checks.

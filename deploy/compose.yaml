@@ -1,0 +1,35 @@
+services:
+  app:
+    build: ..
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3220
+      ROOMREADY_ORIGIN: https://${ROOMREADY_DOMAIN:?Set the approved public hostname}
+      ROOMREADY_DATABASE_PATH: /data/roomready.sqlite
+      ROOMREADY_MODEL_PROVIDER: none
+    volumes:
+      - roomready_data:/data
+    expose:
+      - "3220"
+    mem_limit: 512m
+    cpus: 1.0
+  https:
+    image: caddy:2.10.2
+    restart: unless-stopped
+    environment:
+      ROOMREADY_DOMAIN: ${ROOMREADY_DOMAIN:?Set the approved public hostname}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+volumes:
+  roomready_data:
+  caddy_data:
+  caddy_config:

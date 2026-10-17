@@ -1,0 +1,11 @@
+import {Store} from './store.js';
+import {createApp} from './app.js';
+import {createBedrockAdviser} from './model.js';
+const production=process.env.NODE_ENV==='production',origin=process.env.ROOMREADY_ORIGIN;
+if(production&&(!origin||new URL(origin).protocol!=='https:'))throw new Error('Set the exact ROOMREADY_ORIGIN HTTPS URL.');
+const enabled=process.env.ROOMREADY_MODEL_PROVIDER==='bedrock';
+if(enabled&&(!process.env.AWS_REGION||!process.env.BEDROCK_MODEL_ID))throw new Error('Bedrock mode needs an approved region/model and credential chain.');
+const store=new Store(process.env.ROOMREADY_DATABASE_PATH??'.local/roomready.sqlite');
+const app=createApp({store,production,origin,adviser:enabled?createBedrockAdviser(process.env.AWS_REGION!,process.env.BEDROCK_MODEL_ID!):undefined,modelLimit:Number(process.env.ROOMREADY_MODEL_CALLS_PER_DAY??100)});
+const server=app.listen(Number(process.env.PORT??3220),process.env.HOST??'127.0.0.1',()=>console.log('RoomReady listening; model '+(enabled?'configured, requests require verification':'disabled')));
+const stop=()=>{server.close(()=>{store.close();process.exit(0);});server.closeIdleConnections();setTimeout(()=>{server.closeAllConnections();},5000).unref();};process.on('SIGTERM',stop);process.on('SIGINT',stop);

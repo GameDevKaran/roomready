@@ -1,0 +1,21 @@
+{
+ "scope":"Synthetic post-implementation receipt scenarios, frozen before first run; not model-selection or real-hardware accuracy.",
+ "cases":[
+  {"name":"Untested","signal":"none","replay":"none","output":"none","network":"none","next":"signal","ready":false},
+  {"name":"Denied input, other checks work","signal":"denied","replay":"none","output":"yes","network":"good","next":"signal","ready":false},
+  {"name":"Quiet despite intelligible replay","signal":"quiet","replay":"yes","output":"yes","network":"good","next":"signal","ready":false},
+  {"name":"Clipped despite audible output","signal":"clipped","replay":"yes","output":"yes","network":"good","next":"signal","ready":false},
+  {"name":"Healthy level, replay missing","signal":"good","replay":"none","output":"yes","network":"good","next":"replay","ready":false},
+  {"name":"Unclear replay","signal":"good","replay":"no","output":"yes","network":"good","next":"replay","ready":false},
+  {"name":"Unconfirmed replay","signal":"good","replay":"unknown","output":"yes","network":"good","next":"replay","ready":false},
+  {"name":"Output not yet tested","signal":"good","replay":"yes","output":"none","network":"good","next":"output","ready":false},
+  {"name":"Playback without confirmation","signal":"good","replay":"yes","output":"unknown","network":"good","next":"output","ready":false},
+  {"name":"Inaudible output","signal":"good","replay":"yes","output":"no","network":"good","next":"output","ready":false},
+  {"name":"Network absent","signal":"good","replay":"yes","output":"yes","network":"none","next":"network","ready":false},
+  {"name":"Network slow tail","signal":"good","replay":"yes","output":"yes","network":"slow","next":"network","ready":false},
+  {"name":"Partial endpoint failure","signal":"good","replay":"yes","output":"yes","network":"loss","next":"network","ready":false},
+  {"name":"All supported evidence passes","signal":"good","replay":"yes","output":"yes","network":"good","next":null,"ready":true},
+  {"name":"Input adjustment requires retest","signal":"good","replay":"yes","output":"yes","network":"good","adjust":"signal","next":"signal","ready":false},
+  {"name":"Output adjustment requires retest","signal":"good","replay":"yes","output":"yes","network":"good","adjust":"output","next":"output","ready":false}
+ ]
+}
