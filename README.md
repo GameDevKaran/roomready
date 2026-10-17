@@ -27,7 +27,7 @@ npm run test:e2e
 node --import tsx scripts/evaluate.ts
 ```
 
-29 Node tests and 20 desktop/mobile browser tests passed. Sixteen frozen synthetic receipt scenarios passed. Browser audio tests inject an explicitly named synthetic Web Audio stream because this automated environment rejects getUserMedia with NotSupportedError. Actual analysis, recording/replay, tone, HTTP/MCP and receipt logic execute; these tests do not prove hardware capture or human audibility.
+30 Node tests and 22 desktop/mobile browser tests passed. Sixteen frozen synthetic receipt scenarios passed. Browser audio tests inject an explicitly named synthetic Web Audio stream because this automated environment rejects getUserMedia with NotSupportedError. Actual analysis, recording/replay, tone, HTTP/MCP and receipt logic execute; these tests do not prove hardware capture or human audibility.
 
 ## Operation and limits
 

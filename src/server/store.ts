@@ -12,9 +12,10 @@ export class Store{
  private prune(){this.db.prepare('DELETE FROM operations WHERE owner IN (SELECT owner FROM sessions WHERE expires < ?)').run(Date.now());this.db.prepare('DELETE FROM sessions WHERE expires < ?').run(Date.now());}
  get(owner:string):Session|null{this.prune();const row=this.db.prepare('SELECT body FROM sessions WHERE owner=?').get(owner) as {body:string}|undefined;return row?JSON.parse(row.body):null;}
  create(owner:string){const current=this.get(owner);if(current)return current;const state=createSession();this.db.prepare('INSERT INTO sessions VALUES(?,?,?)').run(owner,JSON.stringify(state),Date.now()+86400000);return state;}
- command(owner:string,command:Command,revision:number,key:string){
+ command(owner:string,command:Command,revision:number,key:string,expectedSessionId:string){
   this.db.exec('BEGIN IMMEDIATE');try{
    const state=this.get(owner);if(!state)throw new DomainError('NO_SESSION','Start a new soundcheck.');
+   if(state.id!==expectedSessionId)throw new DomainError('STALE_SESSION','This soundcheck was replaced. Refresh before changing it.');
    const hash=createHash('sha256').update(JSON.stringify({command,revision})).digest('hex');
    const cached=this.db.prepare('SELECT hash FROM operations WHERE owner=? AND key=?').get(owner,key) as {hash:string}|undefined;
    if(cached){if(cached.hash!==hash)throw new DomainError('KEY_REUSED','Request identifier already used.');this.db.exec('COMMIT');return state;}
