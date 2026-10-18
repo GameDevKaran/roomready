@@ -6,6 +6,8 @@ Narrow infrastructure was adapted from [HoldThat commit 557def91](https://github
 
 AI coding agents substantially assisted design, coding, tests, documentation and synthetic demo recording. No human review or real-device testing is inferred.
 
+The optional Cloud Storage transport, async persistence interface, generation-CAS retry pattern, global admission pattern and SDK transport regression were adapted from [HoldThat commit 0e90b898](https://github.com/GameDevKaran/holdthat/tree/0e90b8984c35a912e4471d20a6c7c92adacb9745), MIT. RoomReady independently retains its absolute 24-hour receipt expiry, create-or-return bootstrap behavior, evidence commands, source of truth and dedicated bucket. No HoldThat product state or UI was copied. The SDK tests use a labelled localhost HTTP double, not Google Cloud credentials or real cloud activity.
+
 Implementation references, reviewed 17 October 2026:
 
 - [MDN getUserMedia](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia): explicit permission and secure-context requirements.

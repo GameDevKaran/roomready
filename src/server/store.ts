@@ -22,6 +22,6 @@ export class Store{
    const next=applyCommand(state,command,revision);this.db.prepare('UPDATE sessions SET body=? WHERE owner=?').run(JSON.stringify(next),owner);this.db.prepare('INSERT INTO operations VALUES(?,?,?)').run(owner,key,hash);this.db.exec('COMMIT');return next;
   }catch(e){this.db.exec('ROLLBACK');throw e;}
  }
- clear(owner:string){this.db.exec('BEGIN IMMEDIATE');try{this.db.prepare('DELETE FROM operations WHERE owner=?').run(owner);this.db.prepare('DELETE FROM sessions WHERE owner=?').run(owner);this.db.exec('COMMIT');}catch(e){this.db.exec('ROLLBACK');throw e;}}
+ clear(owner:string,expectedSessionId?:string){this.db.exec('BEGIN IMMEDIATE');try{const current=this.get(owner);if(current&&expectedSessionId&&current.id!==expectedSessionId)throw new DomainError('STALE_SESSION','This soundcheck was replaced. Refresh before clearing it.');this.db.prepare('DELETE FROM operations WHERE owner=?').run(owner);this.db.prepare('DELETE FROM sessions WHERE owner=?').run(owner);this.db.exec('COMMIT');}catch(e){this.db.exec('ROLLBACK');throw e;}}
  close(){this.db.close();}
 }

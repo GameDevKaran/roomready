@@ -1,6 +1,6 @@
 # Current hosting decision — 18 October 2026
 
-Preferred supporting GCP project: tough-melody-508008-p8 only. Existing access verified; no deployment or new spend approved. See [hosting scope](hosting-scope.md). The tested SQLite/volume package below remains valid for local use. Do not deploy it unchanged to ephemeral Cloud Run or mount SQLite through Storage FUSE. Public hosting is optional for Amazon primary entries under the official FAQ; locally runnable source and actual video remain the immediate release path. Any cloud persistence adapter must be separately implemented/tested. The Compose package below is a single-host option, not a Cloud Run migration.
+Preferred supporting GCP project: tough-melody-508008-p8 only. The release requires public HTTPS and verified deployed behavior. The tested SQLite/volume package below remains valid for local use. An independently configured GCS adapter is now implemented and tested with local transport doubles; it has not been live-verified or deployed by this milestone. See [cloud persistence](cloud-persistence.md) and [hosting scope](hosting-scope.md). Do not mount SQLite through Storage FUSE. The Compose package below remains a single-host option.
 
 # Run and deploy RoomReady
 
