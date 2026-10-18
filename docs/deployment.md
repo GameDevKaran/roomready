@@ -1,3 +1,7 @@
+# Current hosting decision — 18 October 2026
+
+Preferred supporting GCP project: tough-melody-508008-p8 only. Existing access verified; no deployment or new spend approved. See [hosting scope](hosting-scope.md). The tested SQLite/volume package below remains valid for local use. Do not deploy it unchanged to ephemeral Cloud Run or mount SQLite through Storage FUSE. Public hosting is optional for Amazon primary entries under the official FAQ; locally runnable source and actual video remain the immediate release path. Any cloud persistence adapter must be separately implemented/tested. The Compose package below is a single-host option, not a Cloud Run migration.
+
 # Run and deploy RoomReady
 
 Node 24 is required. Run `npm ci`, `npm run build`, then `npm start`; open http://127.0.0.1:3220. Local mode performs no model inference. Browser media capture requires HTTPS or localhost and an explicit permission grant. Supported initial target: Chromium desktop; mobile layout is tested by emulation, not physical devices.
