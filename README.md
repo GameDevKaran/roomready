@@ -4,7 +4,9 @@ A calmer browser soundcheck before a lesson, workshop or conversation.
 
 RoomReady measures a consented microphone sample, asks you to listen to its replay, plays a quiet test tone and times five requests to its own endpoint. It separates browser measurements from user confirmations. Changes require retesting; earlier observations remain in history. Export a readiness receipt that states its limits.
 
-This is an Alexa+ experience simulation with real local MCP tools, not a native Alexa or Zoom/Teams integration. Raw audio stays in the browser. Model guidance is optional and disabled by default. Live Bedrock, physical microphone compatibility and public hosting are not yet verified.
+**[Open RoomReady](https://roomready-kc4mxxrtbq-uc.a.run.app)** · [Source](https://github.com/GameDevKaran/roomready)
+
+This is an Alexa+ experience simulation with real deployed MCP tools. It has no native Alexa or Zoom/Teams integration. Raw audio stays in the browser. Model guidance is optional and disabled on the public release; no live Bedrock inference is claimed. Physical microphone compatibility and human listening still require a supported-device walkthrough.
 
 ## Run
 
@@ -27,7 +29,9 @@ npm run test:e2e
 node --import tsx scripts/evaluate.ts
 ```
 
-30 Node tests and 22 desktop/mobile browser tests passed. Sixteen frozen synthetic receipt scenarios passed. Browser audio tests inject an explicitly named synthetic Web Audio stream because this automated environment rejects getUserMedia with NotSupportedError. Actual analysis, recording/replay, tone, HTTP/MCP and receipt logic execute; these tests do not prove hardware capture or human audibility.
+42 Node tests and 22 desktop/mobile browser tests passed. Sixteen frozen synthetic receipt scenarios passed. Browser audio tests inject an explicitly named synthetic Web Audio stream because this automated environment rejects getUserMedia with NotSupportedError. Actual analysis, recording/replay, tone, HTTP/MCP and receipt logic execute; these tests do not prove hardware capture or human audibility.
+
+The October 19 public release passed real MCP, GCS persistence across a Cloud Run revision replacement, isolation/origin, export/delete and anonymous browser checks. Five live endpoint replies had a 349 ms p95; the receipt correctly remained unresolved under its 300 ms threshold. See [release evidence](docs/live-release.md) for exact scope and [deployment](docs/deployment.md) for reproduction.
 
 ## Operation and limits
 
