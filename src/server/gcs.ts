@@ -35,9 +35,12 @@ export class GcsObjects implements ConditionalObjects {
   }
   async write(name: string, body: string, generation: string): Promise<void> {
     try {
+      const expires = (JSON.parse(body) as {expires?: number}).expires;
+      if (!Number.isSafeInteger(expires) || expires! < 86400000) throw new Error('Missing absolute session expiry.');
+      const customTime = new Date(expires! - 86400000).toISOString();
       await this.bucket.file(name).save(body, {resumable: false, validation: 'crc32c',
         preconditionOpts: {ifGenerationMatch: generation},
-        metadata: {contentType: 'application/json', cacheControl: 'no-store'}});
+        metadata: {contentType: 'application/json', cacheControl: 'no-store', customTime}});
     } catch (error) { if (code(error) === 412) throw new GenerationConflict(); throw error; }
   }
   async remove(name: string, generation: string): Promise<void> {

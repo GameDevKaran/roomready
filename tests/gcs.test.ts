@@ -13,7 +13,7 @@ test('GCS scope rejects other project/bucket configuration before any request', 
 });
 
 test('real Google Storage SDK serializes generation guards against a labelled local HTTP double', async () => {
-  const body = JSON.stringify({fixture: 'LOCAL HTTP STORAGE DOUBLE — no live GCP'});
+  const body = JSON.stringify({fixture: 'LOCAL HTTP STORAGE DOUBLE — no live GCP', expires: Date.parse('2026-10-20T00:00:00Z')});
   const crc = new CRC32C(); crc.update(Buffer.from(body));
   const generation = '9007199254740993123';
   const seen: {method: string; url: URL; body: string}[] = [];
@@ -42,6 +42,7 @@ test('real Google Storage SDK serializes generation guards against a labelled lo
     const upload = seen.find(r => r.method === 'POST')!;
     assert.equal(upload.url.searchParams.get('ifGenerationMatch'), '0'); assert.ok(upload.body.includes(body));
     assert.ok(upload.body.includes('no-store'));
+    assert.ok(upload.body.includes('2026-10-19T00:00:00.000Z')); // Immutable creation time governs physical lifecycle.
     await objects.write('sessions/test.json', body, generation);
     assert.equal(seen.filter(r => r.method === 'POST').at(-1)?.url.searchParams.get('ifGenerationMatch'), generation);
     await objects.remove('sessions/test.json', generation);
